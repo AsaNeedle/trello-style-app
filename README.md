@@ -1,5 +1,5 @@
 This was an educational project to familiarize myself with React. 
-Things I was working on include handling local storage and dealing with drag and drop events in the DOM. s
+Things I was working on include handling local storage and dealing with drag and drop events in the DOM.
 
 
 
