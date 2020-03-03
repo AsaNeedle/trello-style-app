@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import lodash from 'lodash'
+import Button from 'react-bootstrap/Button';
+import isEquivalent from './utils/isequivalent'
 import './App.css';
 
 function App() {
@@ -45,29 +46,16 @@ function App() {
   //   }
   // }
 
-  // check equivalence of objects
-  function isEquivalent(a, b) {
-    const aProps = Object.getOwnPropertyNames(a);
-    const bProps = Object.getOwnPropertyNames(b);
-    if (aProps.length !== bProps.length) {
-      return false;
-    }
-    for (let i = 0; i < aProps.length; i++) {
-      const propName = aProps[i];
-      if (a[propName] !== b[propName]) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   const updatePersistData = (data) => {
+    return
     localStorage.setItem('myData', JSON.stringify(data))
   }
 
   const dragStart = (e) => {
-    e.dataTransfer.setData("Ticket", e.target.id)
-    e.dataTransfer.setData("Origin", e.target.getAttribute('name'))
+    e.dataTransfer.setData("TicketName", e.target.id)
+    e.dataTransfer.setData("OriginId", e.target.name)
+    e.dataTransfer.setData("TicketId", e.target.index)
   }
   const dragging = (e) => {
     return
@@ -78,30 +66,53 @@ function App() {
 
   const drop = (e) => {
     e.preventDefault();
-    const ticket = e.dataTransfer.getData("Ticket")
-    const origin = e.dataTransfer.getData("Origin")
-    if (e.target.getAttribute("class") === "column" && e.target.id !== origin){   
-      let newColumns = addTicket(e.target.id, ticket, columns, tickets)
-      // newColumns = removeTicket(origin, ticket, newColumns)
+    const ticketName = e.dataTransfer.getData("TicketName")
+    const originId = e.dataTransfer.getData("OriginId")
+    const ticketId = () => {
+      for (let c of columns){
+        let colTickets = c.tickets
+        for (let t in colTickets){
+          let curTicket = colTickets[t]
+          if (tickets[curTicket].content === ticketName){
+            return curTicket
+          }
+        }
+      }
+      return null
+    }
+    const tId = ticketId()
+    if (e.target.getAttribute("class") === "column" && e.target.id !== originId){ 
+      let newColumns = moveTicket(e.target.id, tId, ticketName, columns)
       setColumns(newColumns)
       updatePersistData(newColumns)
     }
   }
-  // const moveTicket  = (id, val, columns, tickets) => {
-  //   const newColumns = columns.map((col) => {
-  //     if (col.id === id) {
-  //       return {
-  //               id: col.id,
-  //               title: col.title, 
-  //               tickets: [...col.tickets, newTicketId]
-  //             }   
-  //     } else if (col.id === origin){
-        
-  //     } else {
-  //       return col
-  //     }
-  //   })
-  // }
+
+  const moveTicket = (colId, ticketId, val, columns) => {
+    const newColumns = columns.map((col) => {
+      // removes ticket from origin
+      if (col.tickets.includes(ticketId)){
+        let srcCol = {
+          id: col.id,
+          title: col.title,
+          tickets: col.tickets.filter(x => x != ticketId)
+        }
+        return srcCol
+      }
+      // add ticket to destination
+      if (col.id == colId) {
+        const destCol = {
+          id: col.id,
+          title: col.title, 
+          tickets: [...col.tickets, ticketId]
+        }
+        return destCol
+      } else {
+        return col
+      }
+    });
+    return newColumns
+  }
 
   const addTicket = (id, val, columns, tickets) => {
     const newTicketId = tickets.length
@@ -148,6 +159,7 @@ function App() {
       super(props)
       this.state={
         text: props.text,
+        index: props.index,
         done: false
       }
     }
@@ -160,7 +172,8 @@ function App() {
       return (
         <div className="ticket"
              name={this.props.column}
-             id={this.state.text} 
+             id={this.state.text}
+             index={this.state.index}
              draggable="true"
              onDragStart={dragStart}
              onDrag={dragging}
@@ -186,8 +199,13 @@ function App() {
         <button onClick={() => {removeColumn(this.state.id)}}>X</button>
         <br/>
         {this.state.items.map((item, i) => { 
-          return <Ticket key={i} column={this.state.id} done={item.done} text={item.content}/>
+          return <Ticket key={i} column={this.state.id} 
+                                 index={item.id} 
+                                 done={item.done} 
+                                 text={item.content}/>
         })}
+        <br/>
+        <div>Drag here to add!</div>
         <br/>
         <TicketForm id={this.state.id}/>
         </div>
