@@ -1,35 +1,38 @@
 import React, { useState } from 'react';
+import lodash from 'lodash'
 import './App.css';
 
 function App() {
   const [isPersist, setIsPersist] = useState(false)
+  const [tickets, setTickets] = useState([
+    {id: 0, content: "python", done: false},
+    {id: 1, content: "ruby", done: false},
+    {id: 2, content: "javascript", done: true},
+    {id: 3, content: "haskell", done: false},
+    {id: 4, content: "Staten Island", done: true},
+    {id: 5, content: "Brooklyn", done: false},
+    {id: 6, content: "Queens", done: true},
+    {id: 7, content: "Bronx", done: false},
+    {id: 8, content: "Manhattan", done: true},
+    {id: 9, content: "Aramis", done: false},
+    {id: 10, content: "Athos", done: false},
+    {id: 11, content: "Porthos", done: true},
+  ])
   const [columns, setColumns] = useState([
     {
-      title: "numbers",
-      tickets: [
-        {content: "billion", done: false},
-        {content: "million", done: true},
-        {content: "pi", done: false},
-        {content: "e", done: true},
-        {content: "i", done: false},
-        {content: "six", done: true},
-      ]
+      id: 0,
+      title: "Languages",
+      tickets: [0, 1, 2, 3]
     },
     {
-      title: "things to say",
-      tickets: [
-        {content: "koniichiwa", done: false},
-        {content: "sayonara", done: true},
-        {content: "ohayoo", done: false}
-      ]
+      id: 1,
+      title: "Boroughs",
+      tickets: [4, 5, 6, 7, 8]
     },
     {
-      title: "phrases",
-      tickets: [
-        {content: "hey", done: false},
-        {content: "yo", done: true},
-        {content: "sup", done: false}
-      ]
+      id: 2,
+      title: "Musketeers",
+      tickets: [9, 10, 11]
     }
   ])
     
@@ -78,27 +81,46 @@ function App() {
     const ticket = e.dataTransfer.getData("Ticket")
     const origin = e.dataTransfer.getData("Origin")
     if (e.target.getAttribute("class") === "column" && e.target.id !== origin){   
-      let newColumns = addTicket(e.target.id, ticket, columns)
-      newColumns = removeTicket(origin, ticket, newColumns)
+      let newColumns = addTicket(e.target.id, ticket, columns, tickets)
+      // newColumns = removeTicket(origin, ticket, newColumns)
       setColumns(newColumns)
       updatePersistData(newColumns)
     }
   }
+  // const moveTicket  = (id, val, columns, tickets) => {
+  //   const newColumns = columns.map((col) => {
+  //     if (col.id === id) {
+  //       return {
+  //               id: col.id,
+  //               title: col.title, 
+  //               tickets: [...col.tickets, newTicketId]
+  //             }   
+  //     } else if (col.id === origin){
+        
+  //     } else {
+  //       return col
+  //     }
+  //   })
+  // }
 
-  const addTicket = (title, val, state) => {
-    const newColumns = state.map((col) => {
-      if (col.title === title) {
+  const addTicket = (id, val, columns, tickets) => {
+    const newTicketId = tickets.length
+    const newTickets = [...tickets, {id: newTicketId, content: val, done: false}]
+    const newColumns = columns.map((col) => {
+      if (col.id === id) {
         return {
+                id: col.id,
                 title: col.title, 
-                tickets: [...col.tickets, {content: val, done: false}]
+                tickets: [...col.tickets, newTicketId]
               }   
       } else {
         return col
       }
     });
-    return newColumns
+    return [newColumns, newTickets]
   }
 
+// deprecated?
   const removeTicket = (origin, val, state) => {
     const newColumns = state.map((col) => {
       if (col.title === origin) {
@@ -152,22 +174,22 @@ function App() {
   class TicketColumn extends React.Component {
     constructor(props){
       super(props)
-      this.state = {items: props.items, title: props.title}
+      this.state = {items: props.items, title: props.title, id: props.id}
     }
     render(){
       return (
         <div className="column"
-             id={this.state.title}
+             id={this.state.id}
              onDrop={drop}
              onDragOver={allowDrop}>
         <header><b>{this.state.title}</b></header>
-        <button onClick={() => {removeColumn(this.state.title)}}>X</button>
+        <button onClick={() => {removeColumn(this.state.id)}}>X</button>
         <br/>
         {this.state.items.map((item, i) => { 
-          return <Ticket key={i} column={this.state.title} done={item.done} text={item.content}/>
+          return <Ticket key={i} column={this.state.id} done={item.done} text={item.content}/>
         })}
         <br/>
-        <TicketForm title={this.state.title}/>
+        <TicketForm id={this.state.id}/>
         </div>
       )
     }
@@ -176,8 +198,7 @@ function App() {
   class Workspace extends React.Component {
     constructor(props){
       super(props)
-      this.state = {}
-      this.state = {columns: props.columns}
+      this.state = {columns: props.columns, tickets: props.tickets}
     }
     componentDidMount(){
       const persistedData = JSON.parse(localStorage.getItem('myData' || null))
@@ -186,13 +207,16 @@ function App() {
         setIsPersist(true)
       }
     }
-
     render(){
       const { columns } = this.props
+      const { tickets } = this.props
       return(
         <div className="flex-container">
         { columns.map((column, i) => {
-            return <TicketColumn key={i} items={column.tickets} title={column.title}/>
+            return <TicketColumn key={i} 
+                                 items={column.tickets.map((id) => tickets[id])} 
+                                 title={column.title} 
+                                 id={column.id}/>
           })
         }
         <ColumnForm />
@@ -205,7 +229,7 @@ function App() {
 
     constructor(props) {
       super(props)
-      this.state = {value: '', title: props.title}
+      this.state = {value: '', id: props.id}
       this.handleChange = this.handleChange.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -216,8 +240,11 @@ function App() {
 
     handleSubmit(event){
       if (this.state.value !== ""){
-        const newColumns = addTicket(this.state.title, this.state.value, columns)
+        const res = addTicket(this.state.id, this.state.value, columns, tickets)
+        const newColumns = res[0]
+        const newTickets = res[1]
         setColumns(newColumns)
+        setTickets(newTickets)
         updatePersistData(newColumns)
       } 
       event.preventDefault();
@@ -273,7 +300,7 @@ function App() {
   return (
     <div>
       <header id="title" >Aloe</header>
-      <Workspace columns={columns} />
+      <Workspace columns={columns} tickets={tickets}/>
     </div> )
 }
 
