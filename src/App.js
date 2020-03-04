@@ -62,14 +62,16 @@ function App() {
     return
   }
   const allowDrop = (e) => { 
-    // Do I want to add e.persist() here? I still don't understand what it does... 
-    // e.preventDefault();
+    e.preventDefault();
+    // if (e === dropColumn){
+    //   return
+    // }
     // const originId = e.dataTransfer.getData("OriginId")
     // if (e.target.getAttribute("class") === "column"){
     //   if (e.target.id !== originId){
-    //     setDropColumn(prevState => e)
+    //     setDropColumn(e)
     //   } else {
-    //     setDropColumn(prevState => false)
+    //     setDropColumn(false)
     //   }
     // }
   }
@@ -215,8 +217,9 @@ function App() {
                                  text={item.content}/>
         })}
         <br/>
-        <div>Drag here to add!</div>
         <br/>
+        <br/>
+        <div>^^^Drag here to add!^^^</div>
         <TicketForm id={this.state.id}/>
         </div>
       )
