@@ -78,6 +78,7 @@ function App() {
 
   const drop = (e) => {
     e.preventDefault();
+    console.log(e.target.id)
     const ticketName = e.dataTransfer.getData("TicketName")
     const originId = e.dataTransfer.getData("OriginId")
     const ticketId = () => {
@@ -297,7 +298,7 @@ function App() {
 
     constructor(props) {
       super(props)
-      this.state = {value: ''}
+      this.state = {id: columns.length, value: ''}
       this.handleChange = this.handleChange.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -309,6 +310,7 @@ function App() {
     handleSubmit(event){
       if (this.state.value !== ""){
         const newColumns = [...columns, {
+          id: this.state.id,
           title: this.state.value,
           tickets: []
         }]
@@ -329,7 +331,7 @@ function App() {
     }
   }
   return (
-    <div>
+    <div class="container">
       <header id="title" >Aloe</header>
       <Workspace columns={columns} tickets={tickets}/>
     </div> )
