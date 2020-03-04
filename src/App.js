@@ -7,33 +7,33 @@ function App() {
   const [isPersist, setIsPersist] = useState(false)
   const [dropColumn, setDropColumn] = useState(false)
   const [tickets, setTickets] = useState([
-    {id: 0, content: "python", done: false},
-    {id: 1, content: "ruby", done: false},
-    {id: 2, content: "javascript", done: true},
-    {id: 3, content: "haskell", done: false},
+    {id: 0, content: "Python", done: false},
+    {id: 1, content: "Ruby", done: false},
+    {id: 2, content: "JavaScript", done: true},
+    {id: 3, content: "Haskell", done: false},
     {id: 4, content: "Staten Island", done: true},
     {id: 5, content: "Brooklyn", done: false},
     {id: 6, content: "Queens", done: true},
     {id: 7, content: "Bronx", done: false},
     {id: 8, content: "Manhattan", done: true},
-    {id: 9, content: "Aramis", done: false},
-    {id: 10, content: "Athos", done: false},
-    {id: 11, content: "Porthos", done: true},
+    {id: 9, content: "Persian", done: false},
+    {id: 10, content: "Munchkin", done: false},
+    {id: 11, content: "Bengal", done: true},
   ])
   const [columns, setColumns] = useState([
     {
       id: 0,
-      title: "Languages",
+      title: "Languages to learn",
       tickets: [0, 1, 2, 3]
     },
     {
       id: 1,
-      title: "Boroughs",
+      title: "Boroughs to explore",
       tickets: [4, 5, 6, 7, 8]
     },
     {
       id: 2,
-      title: "Musketeers",
+      title: "Cats to pet",
       tickets: [9, 10, 11]
     }
   ])
@@ -91,7 +91,7 @@ function App() {
           }
         }
       }
-      return null
+      return null   
     }
     const tId = ticketId()
     if (e.target.getAttribute("class") === "column" && e.target.id !== originId){ 
@@ -286,7 +286,7 @@ function App() {
       return (
         <form onSubmit={this.handleSubmit}>
           <label>
-            <input className="tkt-input" type="text" placeholder="Add new ticket" value={this.state.value} onChange={this.handleChange}/>
+            <input className="tkt-input" type="text" placeholder="Add new dream :)" value={this.state.value} onChange={this.handleChange}/>
           </label>
           <input className="input-tkt-btn"type="submit" value="Submit" />
         </form>
@@ -323,7 +323,7 @@ function App() {
       return (
         <form className="column" onSubmit={this.handleSubmit}>
           <label>
-            <input className="col-input" type="text" placeholder="Add new column" value={this.state.value} onChange={this.handleChange}/>
+            <input className="col-input" type="text" placeholder="Add new dream list" value={this.state.value} onChange={this.handleChange}/>
           </label>
           <input className="input-col-btn" type="submit" value="Submit" />
         </form>
@@ -331,8 +331,9 @@ function App() {
     }
   }
   return (
-    <div class="container">
-      <header class="container-fluid" id="title" >Aloe</header>
+    <div className="container">
+      <header className="display-1" id="title" >Hacker Dreams</header>
+      <p class="lead">Don't let your dreams be dreams, hackers.</p>
       <Workspace columns={columns} tickets={tickets}/>
     </div> )
 }

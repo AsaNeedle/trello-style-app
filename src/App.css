@@ -41,7 +41,11 @@ div {
 
 .ticket {
   border: 1px solid #33FF00;
+  border-radius: 5px;
   word-wrap: break-word;
+  margin-bottom: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 button {
@@ -52,6 +56,7 @@ button {
 .tkt-input{
   background-color: #282828;
   color: #33FF00;
+  margin-left: 2px
 }
 
 .input-tkt-btn {
@@ -62,6 +67,7 @@ button {
 .col-input{
   background-color: #282828;
   color: #FFB000;
+  margin-left: 2px
 }
 
 .input-col-btn {
