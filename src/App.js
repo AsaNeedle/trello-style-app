@@ -191,7 +191,7 @@ function App() {
              onDragStart={dragStart}
              onDrag={dragging}
              style={this.state.done ? { textDecoration: "line-through" } : {}} onClick={this.toggleDone}>
-          {this.state.text} 
+          {"\xa0" + this.state.text} 
         </div>
       )
     }
@@ -208,7 +208,7 @@ function App() {
              id={this.state.id}
              onDrop={drop}
              onDragOver={allowDrop}>
-        <header><b>{this.state.title}</b></header>
+        <header><b>{"\xa0" + this.state.title}</b></header>
         <button onClick={() => {removeColumn(this.state.id)}}>X</button>
         <br/>
         {this.state.items.map((item, i) => { 
@@ -332,7 +332,7 @@ function App() {
   }
   return (
     <div class="container">
-      <header id="title" >Aloe</header>
+      <header class="container-fluid" id="title" >Aloe</header>
       <Workspace columns={columns} tickets={tickets}/>
     </div> )
 }
