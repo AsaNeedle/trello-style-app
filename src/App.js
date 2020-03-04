@@ -5,6 +5,7 @@ import './App.css';
 
 function App() {
   const [isPersist, setIsPersist] = useState(false)
+  const [dropColumn, setDropColumn] = useState(false)
   const [tickets, setTickets] = useState([
     {id: 0, content: "python", done: false},
     {id: 1, content: "ruby", done: false},
@@ -60,8 +61,17 @@ function App() {
   const dragging = (e) => {
     return
   }
-  const allowDrop = (e) => {
-    e.preventDefault();
+  const allowDrop = (e) => { 
+    // Do I want to add e.persist() here? I still don't understand what it does... 
+    // e.preventDefault();
+    // const originId = e.dataTransfer.getData("OriginId")
+    // if (e.target.getAttribute("class") === "column"){
+    //   if (e.target.id !== originId){
+    //     setDropColumn(prevState => e)
+    //   } else {
+    //     setDropColumn(prevState => false)
+    //   }
+    // }
   }
 
   const drop = (e) => {
