@@ -1,0 +1,12 @@
+0|"Python"|false
+1|"Ruby"|false
+2|"JavaScript"|true
+3|"Haskell"|false
+4|"StatenIsland"|true
+5|"Brooklyn"|false
+6|"Queens"|true
+7|"Bronx"|false
+8|"Manhattan"|true
+9|"Persian"|false
+10|"Munchkin"|false
+11|"Bengal"|true
