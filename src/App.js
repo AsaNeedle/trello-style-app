@@ -146,8 +146,8 @@ function App() {
     return newColumns
   }
 
-  const removeColumn = (title) => {
-    const newColumns = columns.filter((column) => column.title !== title);
+  const removeColumn = (id) => {
+    const newColumns = columns.filter((column) => column.id !== id);
     setColumns(newColumns)
     updatePersistData(newColumns)
   }
@@ -320,7 +320,7 @@ function App() {
   return (
     <div className="container">
       <header className="display-1" id="title" >Hacker Dreams</header>
-      <p class="lead">Don't let your dreams be dreams, hackers.</p>
+      <p className="lead">Don't let your dreams be dreams, hackers.</p>
       <Workspace columns={columns} tickets={tickets}/>
     </div> )
 }
