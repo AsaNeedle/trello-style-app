@@ -12,5 +12,4 @@ export function isEquivalent(a, b) {
   }
   return true;
 }
-
 export default isEquivalent
