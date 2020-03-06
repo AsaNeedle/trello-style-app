@@ -54,9 +54,7 @@ function App() {
   }
 
   const dragStart = (e) => {
-    e.dataTransfer.setData("TicketName", e.target.id)
-    e.dataTransfer.setData("OriginId", e.target.name)
-    e.dataTransfer.setData("TicketId", e.target.index)
+    e.dataTransfer.setData("TicketId", e.target.id)
   }
   const dragging = (e) => {
     return
@@ -78,24 +76,11 @@ function App() {
 
   const drop = (e) => {
     e.preventDefault();
-    console.log(e.target.id)
-    const ticketName = e.dataTransfer.getData("TicketName")
-    const originId = e.dataTransfer.getData("OriginId")
-    const ticketId = () => {
-      for (let c of columns){
-        let colTickets = c.tickets
-        for (let t in colTickets){
-          let curTicket = colTickets[t]
-          if (tickets[curTicket].content === ticketName){
-            return curTicket
-          }
-        }
-      }
-      return null   
-    }
-    const tId = ticketId()
-    if (e.target.getAttribute("class") === "column" && e.target.id !== originId){ 
-      let newColumns = moveTicket(e.target.id, tId, ticketName, columns)
+    const ticketId = parseInt(e.dataTransfer.getData("TicketId"))
+    const ticketName = tickets[ticketId].content
+    const originId = columns.find(x => x.tickets.includes(ticketId))["id"]
+    if (e.target.getAttribute("class") === "column" && e.target.id != originId){ 
+      let newColumns = moveTicket(e.target.id, ticketId, ticketName, columns)
       setColumns(newColumns)
       updatePersistData(newColumns)
     }
@@ -173,6 +158,7 @@ function App() {
       this.state={
         text: props.text,
         index: props.index,
+        id: props.id,
         done: false
       }
     }
@@ -185,7 +171,7 @@ function App() {
       return (
         <div className="ticket"
              name={this.props.column}
-             id={this.state.text}
+             id={this.state.id}
              index={this.state.index}
              draggable="true"
              onDragStart={dragStart}
@@ -215,6 +201,7 @@ function App() {
           return <Ticket key={i} column={this.state.id} 
                                  index={item.id} 
                                  done={item.done} 
+                                 id={item.id}
                                  text={item.content}/>
         })}
         <br/>
