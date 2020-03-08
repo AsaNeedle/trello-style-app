@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import isEquivalent from './utils/isequivalent'
-import './App.css';
+import './Home.css';
 
 function Home() {
   const [isPersist, setIsPersist] = useState(false)
