@@ -8,7 +8,16 @@ const pool = new Pool({
 })
 
 const getTickets = (req, res) => {
-  pool.query('SELECT * FROM tickets ORDER BY id ASC', (err, results) => {
+  pool.query('SELECT id, content, done FROM tickets ORDER BY id ASC', (err, results) => {
+    if (err) {
+      console.log(err)
+    }
+    res.status(200).json(results.rows)
+  })
+}
+
+const getColumns = (req, res) => {
+  pool.query('SELECT id, columnid FROM tickets ORDER BY id ASC', (err, results) => {
     if (err) {
       console.log(err)
     }
@@ -30,7 +39,8 @@ const createTicket = (request, response) => {
 
 module.exports = {
   getTickets,
-  createTicket
+  createTicket,
+  getColumns
 }
 
 

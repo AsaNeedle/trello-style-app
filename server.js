@@ -12,6 +12,8 @@ app.get('/tickets', db.getTickets)
 
 app.post('/tickets', db.createTicket)
 
+app.get('/columns', db.getColumns)
+
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });

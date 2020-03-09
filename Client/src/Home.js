@@ -28,28 +28,63 @@ function Home() {
     {
       id: 0,
       title: "Languages to learn",
-      tickets: [0, 1, 2, 3]
+      tickets: []
     },
     {
       id: 1,
       title: "Boroughs to explore",
-      tickets: [4, 5, 6, 7, 8]
+      tickets: []
     },
     {
       id: 2,
       title: "Cats to pet",
-      tickets: [9, 10, 11]
+      tickets: []
     }
   ])
+
+  // This function fetches an array of tickets from the backend
+  // and sets the value of tickets to it
   useEffect(() => {
     async function effectFunction(){
       const response = await fetch('/tickets');
       const body = await response.json()
       if (response.status !== 200) throw Error(body.message);
+      // need to find a better way to do this 
       setTickets((state) => state.concat(body))
       setTickets((state) => state.slice(12))
+      console.log(body)
     };
     effectFunction() 
+  }, []);
+
+  // this function fetches an array of tickets, 
+  // with two values (id, columnid) from the backend
+  // and sets the value of columns to it 
+  useEffect(() => {
+    async function effectFunction2(){
+      const response = await fetch('/columns');
+      const body = await response.json()
+      if (response.status !== 200) throw Error(body.message);
+      let newColumns = []
+      for (let i in body){
+        let curItem = body[i]
+        let columnId = curItem.columnid
+        let ticketId = curItem.id
+        let columnIds = () => newColumns.map(x => x.id)
+        if (columnIds().includes(columnId)){
+          newColumns[columnId].tickets.push(ticketId)
+        } else {
+          newColumns.push({
+            id: columnId,
+            title: columns[columnId].title,
+            tickets: [ticketId]
+          })
+        }
+       }
+      setColumns((state) => state.concat(newColumns))
+      setColumns((state) => state.slice(3))
+    };
+    effectFunction2() 
   }, []);
 
   // function DisplayInput (props) {
@@ -102,7 +137,7 @@ function Home() {
 
   const moveTicket = (colId, ticketId, val, columns) => {
     const newColumns = columns.map((col) => {
-      // removes ticket from origin
+      // Removes ticket from origin
       if (col.tickets.includes(ticketId)){
         let srcCol = {
           id: col.id,
@@ -111,7 +146,7 @@ function Home() {
         }
         return srcCol
       }
-      // add ticket to destination
+      // Adds ticket to destination
       if (col.id == colId) {
         const destCol = {
           id: col.id,
@@ -127,7 +162,7 @@ function Home() {
   }
 
   async function addTicket(id, val, columns, tickets) {
-    const newTicketId = tickets.length
+    const newTicketId = () => tickets.length
     const response = fetch('/tickets', {
       method: 'POST',
       headers: {
@@ -137,39 +172,7 @@ function Home() {
     })
     const body = await response;
     const bodytext = await body.text()
-    console.log(`body: ${bodytext}`)
-    // this.setState(tickets.concat([body]));
-    // const newTicketId = tickets.length
-    // const newTickets = [...tickets, {id: newTicketId, content: val, done: false}]
-    // const newColumns = columns.map((col) => {
-    //   if (col.id === id) {
-    //     return {
-    //             id: col.id,
-    //             title: col.title, 
-    //             tickets: [...col.tickets, newTicketId]
-    //           }   
-    //   } else {
-    //     return col
-    //   }
-    // });
     return [columns, tickets]
-  }
-
-// deprecated?
-  const removeTicket = (origin, val, state) => {
-    const newColumns = state.map((col) => {
-      if (col.title === origin) {
-        return {
-                title: col.title, 
-                tickets: col.tickets.filter((t) => {
-                  return t.content !== val
-                })
-              }   
-      } else {
-        return col
-      }
-    });
-    return newColumns
   }
 
   const removeColumn = (id) => {
