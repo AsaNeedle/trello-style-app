@@ -86,17 +86,6 @@ function Home() {
     };
     effectFunction2() 
   }, []);
-
-  // function DisplayInput (props) {
-  //   const displayInput = props.displayInput
-  //   if (displayInput){
-  //     return <TicketForm />
-  //   } else {
-  //     return null
-  //   }
-  // }
-
-
   const updatePersistData = (data) => {
     return
     localStorage.setItem('myData', JSON.stringify(data))
