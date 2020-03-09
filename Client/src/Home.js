@@ -126,21 +126,33 @@ function Home() {
     return newColumns
   }
 
-  const addTicket = (id, val, columns, tickets) => {
+  async function addTicket(id, val, columns, tickets) {
     const newTicketId = tickets.length
-    const newTickets = [...tickets, {id: newTicketId, content: val, done: false}]
-    const newColumns = columns.map((col) => {
-      if (col.id === id) {
-        return {
-                id: col.id,
-                title: col.title, 
-                tickets: [...col.tickets, newTicketId]
-              }   
-      } else {
-        return col
-      }
-    });
-    return [newColumns, newTickets]
+    const response = fetch('/tickets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([ newTicketId, val, false ])
+    })
+    const body = await response;
+    const bodytext = await body.text()
+    console.log(`body: ${bodytext}`)
+    // this.setState(tickets.concat([body]));
+    // const newTicketId = tickets.length
+    // const newTickets = [...tickets, {id: newTicketId, content: val, done: false}]
+    // const newColumns = columns.map((col) => {
+    //   if (col.id === id) {
+    //     return {
+    //             id: col.id,
+    //             title: col.title, 
+    //             tickets: [...col.tickets, newTicketId]
+    //           }   
+    //   } else {
+    //     return col
+    //   }
+    // });
+    return [columns, tickets]
   }
 
 // deprecated?
@@ -183,7 +195,7 @@ function Home() {
 
     render(){
       return (
-        <div className="ticket"
+        <div className="list-group-item"
              name={this.props.column}
              id={this.state.id}
              index={this.state.index}
@@ -205,16 +217,17 @@ function Home() {
     render(){
       return (
         
-        <div className="panel"
+        <div className="column"
              id={this.state.id}
              onDrop={drop}
              onDragOver={allowDrop}>
+        <div className="panel">
         <div className="panel-heading">
-          <b>{"\xa0" + this.state.title}</b>
+          <b>{"\xa0" + this.state.title + "\xa0\xa0\xa0"}</b>
+          <Button type="button" className="pull-right" className="btn btn-danger btn-xs" onClick={() => {removeColumn(this.state.id)}}>X</Button>
         </div>
-        <button type="button" className="btn btn-danger" onClick={() => {removeColumn(this.state.id)}}>X</button>
         <br/>
-        <div className="panel-body">
+        <div className="list-group">
         {this.state.items.map((item, i) => { 
           return <Ticket key={i} column={this.state.id} 
                                  index={item.id} 
@@ -222,6 +235,7 @@ function Home() {
                                  id={item.id}
                                  text={item.content}/>
         })}
+        </div>
         </div>
         <br/>
         <br/>
@@ -277,15 +291,17 @@ function Home() {
     }
 
     handleSubmit(event){
-      if (this.state.value !== ""){
-        const res = addTicket(this.state.id, this.state.value, columns, tickets)
-        const newColumns = res[0]
-        const newTickets = res[1]
-        setColumns(newColumns)
-        setTickets(newTickets)
-        updatePersistData(newColumns)
-      } 
       event.preventDefault();
+      if (this.state.value !== ""){
+        console.log('submitting..')
+        const res = addTicket(this.state.id, this.state.value, columns, tickets)
+
+        // const newColumns = res[0]
+        // const newTickets = res[1]
+        // setColumns(newColumns)
+        // setTickets(newTickets)
+        // updatePersistData(newColumns)
+      } 
     }
 
     render() {
@@ -341,7 +357,6 @@ function Home() {
       <header className="display-1" id="title" >Hacker Dreams</header>
       <p className="lead">Don't let your dreams be dreams, hackers.</p>
       <Workspace columns={columns} tickets={tickets}/>
-      <br />
       <TestPage />
     </div> )
 }

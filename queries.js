@@ -16,8 +16,21 @@ const getTickets = (req, res) => {
   })
 }
 
+const createTicket = (request, response) => {
+  console.log('querying...')
+  const [id, content, done] = request.body
+  pool.query('INSERT INTO tickets (id, content, done) VALUES ($1, $2, $3)', [id, content, done], (err, res) => {
+    if (err){
+      throw err
+    } else {
+      response.send({text: `I got your ticket and submitted it: ${request.body}`})
+    }
+  })
+}
+
 module.exports = {
-  getTickets
+  getTickets,
+  createTicket
 }
 
 
