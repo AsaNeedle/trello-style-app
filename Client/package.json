@@ -42,6 +42,6 @@
   "devDependencies": {
     "gh-pages": "^2.2.0"
   },
-  "homepage": "https://asaneedle.github.io/trello-style-app/",
+  "homepage": "https://asaneedle.github.io/home/",
   "proxy": "http://localhost:5000/"
 }
