@@ -28,10 +28,10 @@ div {
 }
 
 .column {
+  font-size: 20px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  width: 200px;
   margin-left: 10px;
   color: #FFB000;
   border: 2px solid #33FF00;
@@ -39,7 +39,10 @@ div {
   word-wrap: break-word;
 }
 
-.ticket {
+.list-group-item {
+  background: black;
+  font-size: 20px;
+  font-weight: 500;
   border: 1px solid #33FF00;
   border-radius: 5px;
   word-wrap: break-word;
@@ -52,6 +55,7 @@ button {
   background-color: black;
   color: #33FF00;
 }
+
 
 .tkt-input{
   background-color: #282828;
