@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import isEquivalent from './utils/isequivalent'
 import './Home.css';
+import TestPage from './TestPage.js'
 
 function Home() {
   const [isPersist, setIsPersist] = useState(false)
   const [dropColumn, setDropColumn] = useState(false)
-  const [tickets, setTickets] = useState([
-    {id: 0, content: "Python", done: false},
-    {id: 1, content: "Ruby", done: false},
-    {id: 2, content: "JavaScript", done: true},
-    {id: 3, content: "Haskell", done: false},
-    {id: 4, content: "Staten Island", done: true},
-    {id: 5, content: "Brooklyn", done: false},
-    {id: 6, content: "Queens", done: true},
-    {id: 7, content: "Bronx", done: false},
-    {id: 8, content: "Manhattan", done: true},
-    {id: 9, content: "Persian", done: false},
-    {id: 10, content: "Munchkin", done: false},
-    {id: 11, content: "Bengal", done: true},
-  ])
+  const [tickets, setTickets] = useState(
+    [
+    {id: 0, content: "", done: false},
+    {id: 1, content: "", done: false},
+    {id: 2, content: "", done: true},
+    {id: 3, content: "", done: false},
+    {id: 4, content: "", done: true},
+    {id: 5, content: "", done: false},
+    {id: 6, content: "", done: true},
+    {id: 7, content: "", done: false},
+    {id: 8, content: "", done: true},
+    {id: 9, content: "", done: false},
+    {id: 10, content: "", done: false},
+    {id: 11, content: "", done: true}
+  ]
+  )
+
   const [columns, setColumns] = useState([
     {
       id: 0,
@@ -37,7 +41,17 @@ function Home() {
       tickets: [9, 10, 11]
     }
   ])
-    
+  useEffect(() => {
+    async function effectFunction(){
+      const response = await fetch('/tickets');
+      const body = await response.json()
+      if (response.status !== 200) throw Error(body.message);
+      setTickets((state) => state.concat(body))
+      setTickets((state) => state.slice(12))
+    };
+    effectFunction() 
+  }, []);
+
   // function DisplayInput (props) {
   //   const displayInput = props.displayInput
   //   if (displayInput){
@@ -190,13 +204,17 @@ function Home() {
     }
     render(){
       return (
-        <div className="column"
+        
+        <div className="panel"
              id={this.state.id}
              onDrop={drop}
              onDragOver={allowDrop}>
-        <header><b>{"\xa0" + this.state.title}</b></header>
-        <button onClick={() => {removeColumn(this.state.id)}}>X</button>
+        <div className="panel-heading">
+          <b>{"\xa0" + this.state.title}</b>
+        </div>
+        <button type="button" className="btn btn-danger" onClick={() => {removeColumn(this.state.id)}}>X</button>
         <br/>
+        <div className="panel-body">
         {this.state.items.map((item, i) => { 
           return <Ticket key={i} column={this.state.id} 
                                  index={item.id} 
@@ -204,6 +222,7 @@ function Home() {
                                  id={item.id}
                                  text={item.content}/>
         })}
+        </div>
         <br/>
         <br/>
         <br/>
@@ -322,6 +341,8 @@ function Home() {
       <header className="display-1" id="title" >Hacker Dreams</header>
       <p className="lead">Don't let your dreams be dreams, hackers.</p>
       <Workspace columns={columns} tickets={tickets}/>
+      <br />
+      <TestPage />
     </div> )
 }
 

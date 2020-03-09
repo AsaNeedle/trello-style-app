@@ -13,21 +13,23 @@ import {
 function App(){
   return(
   <Router>
-    <Route path='/'>
+    <Switch>
+    <Route path='/TestPage'>
       <TestPage />
     </Route>
+    <Route path="/Home">
+      <Home />
+    </Route>
+    <Route path="/about">
+      <About />
+    </Route>
+    </Switch>
   </Router>
   )}
-      // <Router>
-      //   <Switch>
-      //     <Route path="/">
-      //       <Home />
-      //     </Route>
-      //     <Route path="/about">
-      //       <About />
-      //     </Route>
-      //   </Switch>
-      // </Router>
+        
+
+        
+
 
 
 export default App;
