@@ -150,18 +150,17 @@ function Home() {
     return newColumns
   }
 
-  async function addTicket(id, val, columns, tickets) {
-    const newTicketId = () => tickets.length
+  async function addTicket(columnId, val) {
     const response = fetch('/tickets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify([ newTicketId, val, false ])
+      body: JSON.stringify([ val, false, columnId])
     })
     const body = await response;
     const bodytext = await body.text()
-    return [columns, tickets]
+    console.log(bodytext)
   }
 
   const removeColumn = (id) => {
@@ -285,8 +284,7 @@ function Home() {
     handleSubmit(event){
       event.preventDefault();
       if (this.state.value !== ""){
-        console.log('submitting..')
-        const res = addTicket(this.state.id, this.state.value, columns, tickets)
+        const res = addTicket(this.state.id, this.state.value)
 
         // const newColumns = res[0]
         // const newTickets = res[1]

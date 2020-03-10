@@ -27,8 +27,8 @@ const getColumns = (req, res) => {
 
 const createTicket = (request, response) => {
   console.log('querying...')
-  const [id, content, done] = request.body
-  pool.query('INSERT INTO tickets (id, content, done) VALUES ($1, $2, $3)', [id, content, done], (err, res) => {
+  const [content, done, columnid] = request.body
+  pool.query('INSERT INTO tickets (content, done, columnid) VALUES ($1, $2, $3)', [content, done, columnid], (err, res) => {
     if (err){
       throw err
     } else {
