@@ -50,9 +50,7 @@ function Home() {
       const body = await response.json()
       if (response.status !== 200) throw Error(body.message);
       // need to find a better way to do this 
-      setTickets((state) => state.concat(body))
-      setTickets((state) => state.slice(12))
-      console.log(body)
+      setTickets(body)
     };
     effectFunction() 
   }, []);
@@ -81,8 +79,7 @@ function Home() {
           })
         }
        }
-      setColumns((state) => state.concat(newColumns))
-      setColumns((state) => state.slice(3))
+      setColumns(newColumns)
     };
     effectFunction2() 
   }, []);
@@ -208,7 +205,6 @@ function Home() {
     }
     render(){
       return (
-        
         <div className="column"
              id={this.state.id}
              onDrop={drop}
@@ -258,7 +254,7 @@ function Home() {
         <div className="flex-container">
         { columns.map((column, i) => {
             return <TicketColumn key={i} 
-                                 items={column.tickets.map((id) => tickets[id])} 
+                                 items={column.tickets.map((id) => tickets[id - 1])} 
                                  title={column.title} 
                                  id={column.id}/>
           })
