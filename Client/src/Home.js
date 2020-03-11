@@ -52,24 +52,18 @@ function Home() {
     }
   ])
 
-  // This function fetches an array of tickets from the backend
-  // and sets the value of tickets to it
   useEffect(() => {
-    async function effectFunction(){
+    async function effectFunctionTickets(){
       const response = await fetch('/tickets');
       const body = await response.json()
       if (response.status !== 200) throw Error(body.message);
-      // need to find a better way to do this 
       setTickets(body)
     };
-    effectFunction() 
+    effectFunctionTickets() 
   }, []);
 
-  // this function fetches an array of tickets, 
-  // with two values (id, columnid) from the backend
-  // and sets the value of columns to it 
   useEffect(() => {
-    async function effectFunction2(){
+    async function effectFunctionColumns(){
       const response = await fetch('/columns');
       const body = await response.json()
       if (response.status !== 200) throw Error(body.message);
@@ -93,7 +87,7 @@ function Home() {
        }
       setColumns(newColumns)
     };
-    effectFunction2() 
+    effectFunctionColumns() 
   }, []);
   const updatePersistData = (data) => {
     return
