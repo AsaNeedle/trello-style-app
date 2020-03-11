@@ -136,6 +136,22 @@ function Home() {
     return newColumns
   }
 
+  async function updateTicket(ticketid, columnid){
+    const response = fetch('/columns', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      parameters: {
+        columndid: JSON.stringify([columnid]),
+        ticketid: JSON.stringify([ticketid])
+      }
+    })
+    const body = await response;
+    const bodytext = await body.text()
+    console.log(bodytext)
+  }
+
   async function addTicket(columnId, val) {
     const response = fetch('/tickets', {
       method: 'POST',

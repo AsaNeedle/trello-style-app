@@ -50,11 +50,25 @@ const createColumns = (request, response) => {
   })
 }
 
+const updateTicket = (request, response) => {
+  console.log("updating...")
+  const columnid = request.params.columnid
+  const ticketid = request.params.ticketid
+  pool.query('UPDATE tickets SET columnid = $1 WHERE id = $2', [columnid, ticketid], (err, res) => {
+    if (err){
+      throw err
+    } else {
+      response.send({text: `Ticket ${ticketid} moved to ${columndid}`})
+    }
+  })
+}
+
 module.exports = {
   getTickets,
   createTicket,
   getColumns,
-  createColumns
+  createColumns,
+  updateTicket
 }
 
 
