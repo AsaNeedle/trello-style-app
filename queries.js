@@ -17,7 +17,7 @@ const getTickets = (req, res) => {
 }
 
 const getColumns = (req, res) => {
-  pool.query('SELECT id, columnid FROM tickets ORDER BY id ASC', (err, results) => {
+  pool.query('SELECT columnid, title FROM columns ORDER BY columnid ASC', (err, results) => {
     if (err) {
       console.log(err)
     }
@@ -37,10 +37,24 @@ const createTicket = (request, response) => {
   })
 }
 
+const createColumns = (request, response) => {
+  console.log('querying...')
+  const title = request.body
+  console.log(request.body)
+  pool.query('INSERT INTO columns (title) VALUES ($1)', [title], (err, res) => {
+    if (err){
+      throw err
+    } else {
+      response.send({text: `I got your column and submitted it: ${request.body}`})
+    }
+  })
+}
+
 module.exports = {
   getTickets,
   createTicket,
-  getColumns
+  getColumns,
+  createColumns
 }
 
 
