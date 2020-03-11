@@ -41,7 +41,7 @@ const createColumns = (request, response) => {
   console.log('querying...')
   const title = request.body
   console.log(request.body)
-  pool.query('INSERT INTO columns (title) VALUES ($1)', [title], (err, res) => {
+  pool.query('INSERT INTO columns(title) VALUES($1)', title, (err, res) => {
     if (err){
       throw err
     } else {
