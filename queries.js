@@ -8,7 +8,7 @@ const pool = new Pool({
 })
 
 const getTickets = (req, res) => {
-  pool.query('SELECT id, content, done FROM tickets ORDER BY id ASC', (err, results) => {
+  pool.query('SELECT id, content, done, columnid FROM tickets ORDER BY id ASC', (err, results) => {
     if (err) {
       console.log(err)
     }

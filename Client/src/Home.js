@@ -32,17 +32,17 @@ function Home() {
   const [columns, setColumns] = useState([
     {
       id: 0,
-      title: "Languages to learn",
+      title: "",
       tickets: []
     },
     {
       id: 1,
-      title: "Boroughs to explore",
+      title: "",
       tickets: []
     },
     {
       id: 2,
-      title: "Cats to pet",
+      title: "",
       tickets: []
     },
     {
@@ -67,24 +67,7 @@ function Home() {
       const response = await fetch('/columns');
       const body = await response.json()
       if (response.status !== 200) throw Error(body.message);
-      let newColumns = []
-      for (let i in body){
-        let curItem = body[i]
-        let columnId = curItem.columnid
-        let ticketId = curItem.id
-        let columnIds = () => newColumns.map(x => x.id)
-        if (columnIds().includes(columnId)){
-          newColumns[columnId].tickets.push(ticketId)
-        } else {
-          if(columns[columnId]){
-          newColumns.push({
-            id: columnId,
-            title: columns[columnId].title,
-            tickets: [ticketId]
-          })
-        }
-        }
-       }
+      const newColumns = body
       setColumns(newColumns)
     };
     effectFunctionColumns() 
@@ -182,7 +165,7 @@ function Home() {
   }
 
   const removeColumn = (id) => {
-    const newColumns = columns.filter((column) => column.id !== id);
+    const newColumns = columns.filter((column) => column.columnid !== id);
     setColumns(newColumns)
     updatePersistData(newColumns)
   }
@@ -223,6 +206,7 @@ function Home() {
       super(props)
       this.state = {items: props.items, title: props.title, id: props.id}
     }
+    
     render(){
       return (
         <div className="column"
@@ -235,8 +219,7 @@ function Home() {
           <Button type="button" className="pull-right" className="btn btn-danger btn-xs" onClick={() => {removeColumn(this.state.id)}}>X</Button>
         </div>
         <br/>
-        <div className="list-group">
-{/*           
+        <div className="list-group">           
         {this.state.items.map((item, i) => { 
           console.log(item)
           return <Ticket key={i} column={this.state.id} 
@@ -244,7 +227,7 @@ function Home() {
                                  done={item.done} 
                                  id={item.id}
                                  text={item.content}/>
-        })} */}
+        })}
         </div>
         </div>
         <br/>
@@ -272,13 +255,14 @@ function Home() {
     render(){
       const { columns } = this.props
       const { tickets } = this.props
+      console.log(tickets)
       return(
         <div className="flex-container">
         { columns.map((column, i) => {
             return <TicketColumn key={i} 
-                                 items={column.tickets.map((id) => tickets[id - 1])} 
+                                 items={tickets.filter((t) => t.columnid == column.columnid)} 
                                  title={column.title} 
-                                 id={column.id}/>
+                                 id={column.columnid}/>
           })
         }
         <ColumnForm />
