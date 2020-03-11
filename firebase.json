@@ -3,7 +3,7 @@
     "rules": "database.rules.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "client/build",
     "ignore": [
       "firebase.json",
       "**/.*",
