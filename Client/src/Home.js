@@ -165,6 +165,21 @@ function Home() {
     const bodytext = await body.text()
     console.log(bodytext)
   }
+  
+  async function addColumn(title){
+    console.log(title)
+    const response = fetch('/columns', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([title])
+    })
+    
+    const body = await response;
+    const bodytext = await body.text()
+    console.log(bodytext)
+  }
 
   const removeColumn = (id) => {
     const newColumns = columns.filter((column) => column.id !== id);
@@ -308,21 +323,6 @@ function Home() {
         </form>
       );
     }
-  }
-
-  async function addColumn(title){
-    console.log(title)
-    const response = fetch('/columns', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([ title])
-    })
-    
-    const body = await response;
-    const bodytext = await body.text()
-    console.log(bodytext)
   }
 
 
