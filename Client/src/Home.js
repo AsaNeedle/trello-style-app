@@ -20,7 +20,12 @@ function Home() {
     {id: 8, content: "", done: true},
     {id: 9, content: "", done: false},
     {id: 10, content: "", done: false},
-    {id: 11, content: "", done: true}
+    {id: 11, content: "", done: true},
+    {id: 12, content: "", done: true},
+    {id: 13, content: "", done: true},
+    {id: 14, content: "", done: true},
+    {id: 15, content: "", done: true},
+    {id: 16, content: "", done: true}
   ]
   )
 
@@ -38,6 +43,11 @@ function Home() {
     {
       id: 2,
       title: "Cats to pet",
+      tickets: []
+    },
+    {
+      id: 3,
+      title: "More tickets",
       tickets: []
     }
   ])
@@ -72,11 +82,13 @@ function Home() {
         if (columnIds().includes(columnId)){
           newColumns[columnId].tickets.push(ticketId)
         } else {
+          if(columns[columnId]){
           newColumns.push({
             id: columnId,
             title: columns[columnId].title,
             tickets: [ticketId]
           })
+        }
         }
        }
       setColumns(newColumns)
@@ -215,13 +227,15 @@ function Home() {
         </div>
         <br/>
         <div className="list-group">
+{/*           
         {this.state.items.map((item, i) => { 
+          console.log(item)
           return <Ticket key={i} column={this.state.id} 
                                  index={item.id} 
                                  done={item.done} 
                                  id={item.id}
                                  text={item.content}/>
-        })}
+        })} */}
         </div>
         </div>
         <br/>
@@ -302,6 +316,22 @@ function Home() {
     }
   }
 
+  async function addColumn(title){
+    console.log(title)
+    const response = fetch('/columns', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([ title])
+    })
+    
+    const body = await response;
+    const bodytext = await body.text()
+    console.log(bodytext)
+  }
+
+
   class ColumnForm extends React.Component {
 
     constructor(props) {
@@ -316,16 +346,10 @@ function Home() {
     }
 
     handleSubmit(event){
-      if (this.state.value !== ""){
-        const newColumns = [...columns, {
-          id: this.state.id,
-          title: this.state.value,
-          tickets: []
-        }]
-        setColumns(newColumns);
-      }
+      addColumn(this.state.value);
       event.preventDefault();
     }
+  
 
     render() {
       return (
